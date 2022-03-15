@@ -1,0 +1,17 @@
+<root main_tree_to_execute="MainTree">
+    <BehaviorTree ID="MainTree">
+
+        <!-- move to the base in priority. if we can't do it (is on the base already || the base is occupied || the base is under the fire), then we shoot.
+        if we can't get to the base, then we check whether should we run away.
+        if we shouldn't, we shoot. if we should, we go to another hex, preferably without moving out of the base-->
+        <Fallback name="root_fallback">
+            <Sequence name="need_to_run_then_shoot">
+                <ConditionNodeNeedToRun name="need_to_run"/>
+                <SimpleMoveFromDangerGripper name="run"/>
+            </Sequence>
+            <SimpleShootGripper name="shoot_gripper"/>
+            <SimpleMoveToBaseGripper name="move_to_base_gripper"/>
+
+        </Fallback>
+    </BehaviorTree>
+</root>

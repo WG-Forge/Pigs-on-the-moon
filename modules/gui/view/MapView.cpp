@@ -22,11 +22,11 @@ MapView::MapView(const Game *game, sf::Mutex &gameMutex, const Point2D &leftTopP
 }
 
 void MapView::DrawGrid(sf::RenderWindow &window) {
-    for (const auto point : map->GetGrid()) {
+    for (const auto& point : map->GetGrid()) {
         int x = size * 3. / 2 * point.first.x + center.x;
         int y = size * (sqrt(3) / 2 * point.first.x + std::sqrt(3) * point.first.z) + center.y;
 
-        if (map->GetType(*point.second) == ConstructionsTypes::EMPTY) {
+        if (point.second->GetType() == ConstructionsTypes::EMPTY) {
             hex.setOutlineColor(sf::Color::Green);
             hex.setFillColor(sf::Color::Transparent);
         } else if (point.second->GetType() == ConstructionsTypes::BASE) {
@@ -53,6 +53,7 @@ void MapView::DrawGrid(sf::RenderWindow &window) {
 }
 
 void MapView::DrawVehicles(sf::RenderWindow &window) {
+    const auto & vehiclesVectors = game->GetVehicles();
     for (int i = 0; i < vehiclesVectors.size(); i++) {
         vehicleLogo.ChangeColorById(i);
         for (auto &vehicle : vehiclesVectors[i]) {
@@ -104,8 +105,6 @@ void MapView::Resize(const sf::Vector2<unsigned int> &windowSize) {
 
 void MapView::Draw(sf::RenderWindow &window) {
     sf::Lock lock(gameMutex);
-
-    vehiclesVectors = game->GetVehicles();
 
     this->DrawGrid(window);
     this->DrawVehicles(window);
